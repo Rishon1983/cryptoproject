@@ -1,7 +1,7 @@
 <template>
     <div class="home-component">
-<!--        <WelcomeComponent/>-->
-<!--        <DeleteButtonComponent/>-->
+        <!--        <WelcomeComponent/>-->
+        <!--        <DeleteButtonComponent/>-->
         <CymulateComponent/>
     </div>
 </template>
@@ -22,6 +22,8 @@
     }
 </script>
 
-<style scoped>
-
+<style>
+    div, input {
+        box-sizing: border-box;
+    }
 </style>

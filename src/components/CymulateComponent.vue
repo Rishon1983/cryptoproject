@@ -3,10 +3,25 @@
         <h1> Cymulate test </h1>
         <div class="content">
             <div class="buttons-container">
-                <button class="button">Get</button>
-                <button class="button">Create</button>
-                <button class="button">Update</button>
-                <button class="button">Delete</button>
+                <div class="button-container">
+                    <button @click="settingsAction({settingsId: null, action: 'get'})" class="button">Get</button>
+                </div>
+                <div class="button-container">
+                    <button @click="settingsAction({settingsId: null, action: 'create'})" class="button">Create</button>
+                </div>
+                <div class="button-container">
+                    <button @click="updateSettings" class="button">Update</button>
+                    <label>
+                        <input v-model="updateId" placeholder="SettingsId">
+                    </label>
+                </div>
+                <div class="button-container">
+                    <button @click="deleteSettings" class="button">Delete
+                    </button>
+                    <label>
+                        <input v-model="deleteId" placeholder="SettingsId">
+                    </label>
+                </div>
             </div>
             <div class="output-container">
                 <div v-for="settings in cymulateSettings" :key="settings.key" class="one-user">
@@ -23,15 +38,35 @@
     export default {
         name: 'CymulateComponent',
         props: {},
+        data() {
+            return {
+                updateId: '',
+                deleteId: ''
+            }
+        },
         computed: {
             ...mapState({
                 cymulateSettings: state => state.cymulate.cymulateSettings,
             })
         },
         methods: {
-            ...mapActions('main', [
-                'updateMessage'
+            ...mapActions('cymulate', [
+                'settingsAction'
             ]),
+            updateSettings() {
+                if (this.updateId !== '' && typeof this.updateId === 'string') {
+                    this.settingsAction({settingsId: this.updateId, action: 'update'});
+                } else {
+                    alert('please, check updateId');
+                }
+            },
+            deleteSettings() {
+                if (this.deleteId !== '' && typeof this.updateId === 'string') {
+                    this.settingsAction({settingsId: this.deleteId, action: 'delete'});
+                } else {
+                    alert('please, check settingsId');
+                }
+            }
         },
         created() {
         }
@@ -46,6 +81,29 @@
         }
 
         .content {
+            .buttons-container {
+                display: flex;
+                flex-direction: column;
+                align-items: baseline;
+
+                .button-container {
+                    display: flex;
+                    align-items: center;
+
+                    button {
+                        height: 35px;
+                        width: 90px;
+                        padding: 0 20px;
+                        margin: 10px;
+                        cursor: pointer;
+                    }
+
+                    input {
+                        height: 35px;
+                        padding: 0 5px;
+                    }
+                }
+            }
         }
     }
 </style>
