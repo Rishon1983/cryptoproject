@@ -1,38 +1,23 @@
-import getAllSettings from '../models/settings.js'
+import {getAllSettings, createSettings, updateSettings, deleteSettings} from '../models/settings.js'
 
 export const getCymulateSettings = async (connection, data) => {
     console.log('getCymulateSettings');
     return await getAllSettings(connection, data);
 };
 
-const createCymulateSettings = (req, res) => {
+export const createCymulateSettings = async (connection, data) => {
     console.log('createCymulateSettings');
-
-    res.json({
-        ok: true,
-        result: {},
-        errMsg: ''
-    });
+    return await createSettings(connection, data);
 };
 
-const updateCymulateSettings = (req, res) => {
+export const updateCymulateSettings = async (connection, data) => {
     console.log('updateCymulateSettings');
-
-    res.json({
-        ok: true,
-        result: {},
-        errMsg: ''
-    });
+    return await updateSettings(connection, data);
 };
 
-const deleteCymulateSettings = (req, res) => {
-    console.log('deleteCymulateSettings')
-
-    res.json({
-        ok: true,
-        result: {},
-        errMsg: ''
-    });
+export const deleteCymulateSettings = async (connection, data) => {
+    console.log('deleteCymulateSettings');
+    return await deleteSettings(connection, data);
 };
 
 export default {

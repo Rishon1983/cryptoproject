@@ -40,8 +40,8 @@ const sendDataToServer2 = async (data) => {
     // return (JSON.parse(decryptedData));
 }
 
-const getCymulateSettings = async (req, res) => {
-    console.log('getCymulateSettings');
+const cymulateSettings = async (req, res) => {
+    console.log('cymulateSettings');
     const data = req.body;
     const settingsArray = await sendDataToServer2(data);
     // const settingsArray = await getAllSettings(data);
@@ -54,39 +54,6 @@ const getCymulateSettings = async (req, res) => {
     });
 };
 
-const createCymulateSettings = (req, res) => {
-    console.log('createCymulateSettings');
-
-    res.json({
-        ok: true,
-        result: {},
-        errMsg: ''
-    });
-};
-
-const updateCymulateSettings = (req, res) => {
-    console.log('updateCymulateSettings');
-
-    res.json({
-        ok: true,
-        result: {},
-        errMsg: ''
-    });
-};
-
-const deleteCymulateSettings = (req, res) => {
-    console.log('deleteCymulateSettings')
-
-    res.json({
-        ok: true,
-        result: {},
-        errMsg: ''
-    });
-};
-
 export default {
-    getCymulateSettings,
-    createCymulateSettings,
-    updateCymulateSettings,
-    deleteCymulateSettings
+    cymulateSettings
 };

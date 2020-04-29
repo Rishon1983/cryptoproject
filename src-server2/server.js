@@ -18,24 +18,22 @@ const connection = mongoose.createConnection('mongodb://localhost:27017/cymulate
 app.post('/rfc', async (req, res) => {
     // const decryptedData = dencryptIt(req.body.data);
 
-    const settingsArray = await cymulateSettings.getCymulateSettings(connection, req);
-    await res.json(settingsArray);
-
-    // switch (req.body.data.action) {
-    //     case 'get':
-    //         res.json(cymulateSettings.getCymulateSettings(connection));
-    //         break;
-    //     case 'create':
-    //         // res.json(createDataController(connection, req.body.data));
-    //         break;
-    //     case 'update':
-    //         // res.json(updateDataController(connection, req.body.data));
-    //         break;
-    //     case 'delete':
-    //         // res.json(deleteDataController(connection, req.body.data));
-    //         break;
-    //     default: console.log('Problem with req.body.data')
-    // }
+    switch (req.body.action) {
+        case 'get':
+            await res.json(await cymulateSettings.getCymulateSettings(connection, req.body));
+            break;
+        case 'create':
+            await res.json([await cymulateSettings.createCymulateSettings(connection, req.body)]);
+            break;
+        case 'update':
+            await res.json([await cymulateSettings.updateCymulateSettings(connection, req.body)]);
+            break;
+        case 'delete':
+            await res.json([await cymulateSettings.deleteCymulateSettings(connection, req.body)]);
+            break;
+        default:
+            console.log('Problem with req.body.action')
+    }
 });
 
 app.listen(3000, () => {

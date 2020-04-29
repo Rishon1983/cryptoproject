@@ -12,20 +12,32 @@
                 <div class="button-container">
                     <button @click="updateSettings" class="button">Update</button>
                     <label>
-                        <input v-model="updateId" placeholder="SettingsId">
+                        <input v-model="updateId" placeholder="Update by settingsId">
                     </label>
                 </div>
                 <div class="button-container">
                     <button @click="deleteSettings" class="button">Delete
                     </button>
                     <label>
-                        <input v-model="deleteId" placeholder="SettingsId">
+                        <input v-model="deleteId" placeholder="Delete by settingsId">
                     </label>
                 </div>
             </div>
+            <h2>{{cymulateSettingsHeaderAction}}</h2>
             <div class="output-container">
-                <div v-for="settings in cymulateSettings" :key="settings.key" class="one-user">
-                    <div class="user-name">{{settings.value}}</div>
+                <div v-for="settings in cymulateSettings" :key="settings.key" class="one-row-container">
+                    <div class="one-row">
+                        <span class="text">id:</span>
+                        <span>{{settings._id}}</span>
+                    </div>
+                    <div class="one-row">
+                        <span class="text">key:</span>
+                        <span>{{settings.key}}</span>
+                    </div>
+                    <div class="one-row">
+                        <span class="text">value:</span>
+                        <span>{{settings.value}}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,6 +59,7 @@
         computed: {
             ...mapState({
                 cymulateSettings: state => state.cymulate.cymulateSettings,
+                cymulateSettingsHeaderAction: state => state.cymulate.cymulateSettingsHeaderAction,
             })
         },
         methods: {
@@ -56,6 +69,7 @@
             updateSettings() {
                 if (this.updateId !== '' && typeof this.updateId === 'string') {
                     this.settingsAction({settingsId: this.updateId, action: 'update'});
+                    this.clearInputsSettingsId();
                 } else {
                     alert('please, check updateId');
                 }
@@ -63,9 +77,14 @@
             deleteSettings() {
                 if (this.deleteId !== '' && typeof this.updateId === 'string') {
                     this.settingsAction({settingsId: this.deleteId, action: 'delete'});
+                    this.clearInputsSettingsId();
                 } else {
                     alert('please, check settingsId');
                 }
+            },
+            clearInputsSettingsId() {
+                this.updateId = '';
+                this.deleteId = ''
             }
         },
         created() {
@@ -76,8 +95,12 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style type="text/css" lang="scss" scoped>
     #cymulate.cymulate-component {
-        h1 {
-
+        h2 {
+            display: flex;
+            justify-content: flex-start;
+            margin-inline-start: 50px;
+            font-weight: bold;
+            text-decoration: underline;
         }
 
         .content {
@@ -100,7 +123,29 @@
 
                     input {
                         height: 35px;
+                        width: 188px;
                         padding: 0 5px;
+                    }
+                }
+            }
+
+            .output-container {
+                display: flex;
+                flex-direction: column;
+                align-items: baseline;
+
+                .one-row-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: baseline;
+                    border-bottom: 1px solid #ececec;
+                    padding: 5px 15px;
+
+                    .one-row {
+                        .text {
+                            font-weight: bold;
+                            margin-inline-end: 10px;
+                        }
                     }
                 }
             }

@@ -10,7 +10,8 @@ const state = {
             password: 'ubuyg6755r6'
         }
     ],
-    cymulateSettings: []
+    cymulateSettings: [],
+    cymulateSettingsHeaderAction: ''
 };
 
 // getters are functions.
@@ -22,24 +23,24 @@ const actions = {
     settingsAction({commit}, data) {
 
         console.log('data:', data)
-        axios.post('http://localhost:80/api/v1/' + data.action + 'CymulateSettings', data).then(res => {
+        axios.post('http://localhost:80/api/v1/cymulateSettings', data).then(res => {
             console.log(res);
             commit(data.action + 'Settings', res.data.result);
         })
 
-        // const headers = {
-        //     'Content-Type': 'application/x-www-form-urlencoded'
-        // };
-        // const sendData = {
-        //     headers: headers,
-        //     method: 'POST',
-        //     body: data.settingsId
-        // };
-
-        // fetch('/api/v1/' + data.action + 'CymulateSettings', sendData).then(res => {
-        //     console.log(res);
-        //     commit(data.action + 'Settings', res);
-        // })
+        /*//this is example for fetch function (JS)
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
+        const sendData = {
+            headers: headers,
+            method: 'POST',
+            body: data.settingsId
+        };
+        fetch('/api/v1/' + data.action + 'CymulateSettings', sendData).then(res => {
+            console.log(res);
+            commit(data.action + 'Settings', res);
+        })*/
     },
 };
 // mutations are operations that actually mutate the state.
@@ -50,18 +51,25 @@ const actions = {
 const mutations = {
     getSettings(state, res) {
         state.cymulateSettings = res.settingsArray;
+        state.cymulateSettingsHeaderAction = 'All Settings';
+    },
+    createSettings(state, res) {
+        state.cymulateSettings = res.settingsArray;
+        state.cymulateSettingsHeaderAction = 'Created Settings';
     },
     updateSettings(state, res) {
-        state.cymulateSettings.forEach(settings => {
-            if (settings.key === res.settings.key) {
-                settings = res.settings;
-            }
-        })
+        state.cymulateSettings = res.settingsArray;
+        state.cymulateSettingsHeaderAction = 'Updated Settings';
+        //if we want all updated list
+        // state.cymulateSettings.forEach(settings => {
+        //     if (settings._id === res.settingsArray._id) {
+        //         settings.key = res.settingsArray.key;
+        //     }
+        // })
     },
     deleteSettings(state, res) {
-        state.cymulateSettings.filter(settings => {
-            return settings.key !== res.settings.key;
-        })
+        state.cymulateSettings = res.settingsArray;
+        state.cymulateSettingsHeaderAction = 'Deleted Settings';
     },
 };
 
