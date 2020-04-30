@@ -1,7 +1,8 @@
 <template>
     <div id="cymulate" class="cymulate-component">
         <h1> Cymulate test </h1>
-        <div class="content">
+        <h3 v-if="login">Hi, {{userName}} !</h3>
+        <div v-if="login" class="content">
             <div class="buttons-container">
                 <div class="button-container">
                     <button @click="settingsAction({settingsId: null, action: 'get'})" class="button">Get</button>
@@ -41,6 +42,22 @@
                 </div>
             </div>
         </div>
+        <div v-if="!login" class="content login">
+            <div class="login-container">
+                <h3>Login</h3>
+                <div class="login-input-container">
+                    <label>
+                        <input v-model="loginName" placeholder="name">
+                    </label>
+                </div>
+                <div class="login-input-container">
+                    <label>
+                        <input v-model="loginPassword" placeholder="password">
+                    </label>
+                </div>
+                <button @click="loginAction">Login</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -53,18 +70,23 @@
         data() {
             return {
                 updateId: '',
-                deleteId: ''
+                deleteId: '',
+                loginName: 'Cymulate',
+                loginPassword: 'Cymulate'
             }
         },
         computed: {
             ...mapState({
                 cymulateSettings: state => state.cymulate.cymulateSettings,
                 cymulateSettingsHeaderAction: state => state.cymulate.cymulateSettingsHeaderAction,
+                login: state => state.cymulate.login,
+                userName: state => state.cymulate.userName
             })
         },
         methods: {
             ...mapActions('cymulate', [
-                'settingsAction'
+                'settingsAction',
+                'loginClient'
             ]),
             updateSettings() {
                 if (this.updateId !== '' && typeof this.updateId === 'string') {
@@ -85,6 +107,13 @@
             clearInputsSettingsId() {
                 this.updateId = '';
                 this.deleteId = ''
+            },
+            loginAction() {
+                if (this.loginName !== '' && this.loginPassword !== '') {
+                    this.loginClient({username: this.loginName, password: this.loginPassword});
+                } else {
+                    alert('please, put name and password');
+                }
             }
         },
         created() {
@@ -146,6 +175,38 @@
                             font-weight: bold;
                             margin-inline-end: 10px;
                         }
+                    }
+                }
+            }
+
+            &.login {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .login-container {
+                    width: 300px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    box-shadow: 0 0 8px 2px #ccc;
+
+                    .login-input-container {
+                        height: 30px;
+                        margin: 10px 0 25px 0;
+
+                        input {
+                            height: 35px;
+                            margin: 10px;
+                            padding: 0 10px;
+                        }
+                    }
+
+                    button {
+                        width: 100px;
+                        height: 30px;
+                        margin: 10px 0 30px 0;
+                        cursor: pointer;
                     }
                 }
             }

@@ -12,7 +12,9 @@ app.use(express.json());
 
 const connection = mongoose.createConnection('mongodb://localhost:27017/cymulate', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
 });
 
 app.post('/rfc', async (req, res) => {

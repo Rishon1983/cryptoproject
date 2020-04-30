@@ -3,13 +3,8 @@
 import axios from "axios";
 
 const state = {
-    cymulateUsers: [
-        {
-            id: 'tyfyfy898',
-            username: 'Alex1',
-            password: 'ubuyg6755r6'
-        }
-    ],
+    userName: '',
+    login: false,
     cymulateSettings: [],
     cymulateSettingsHeaderAction: ''
 };
@@ -23,6 +18,7 @@ const actions = {
     settingsAction({commit}, data) {
 
         console.log('data:', data)
+        axios.defaults.headers.common['Authorization'] = `Bearer ` + localStorage.getItem('token');
         axios.post('http://localhost:80/api/v1/cymulateSettings', data).then(res => {
             console.log(res);
             commit(data.action + 'Settings', res.data.result);
@@ -42,6 +38,12 @@ const actions = {
             commit(data.action + 'Settings', res);
         })*/
     },
+    loginClient({commit}, data) {
+        axios.post('http://localhost:80/api/v1/cymulateLogin', data).then(res => {
+            console.log(res);
+            commit('login', res.data.result);
+        })
+    }
 };
 // mutations are operations that actually mutate the state.
 // each mutation handler gets the entire state tree as the
@@ -71,6 +73,13 @@ const mutations = {
         state.cymulateSettings = res.settingsArray;
         state.cymulateSettingsHeaderAction = 'Deleted Settings';
     },
+    login(state, res) {
+        if (res.login) {
+            state.userName = res.login.username;
+            state.login = true;
+            localStorage.setItem('token', res.token)
+        }
+    }
 };
 
 // A Vuex instance is created by combining the state, mutations, actions,
