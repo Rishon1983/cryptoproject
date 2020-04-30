@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from "mongoose";
 import cymulateSettings from './controllers/cymulateController.js'
 import axios from "axios";
-// import {encrypt, decrypt} from 'crypto.mjs'
+import {encrypt, decrypt} from "./crypto.js";
 
 const app = express();
 
@@ -18,20 +18,30 @@ const connection = mongoose.createConnection('mongodb://localhost:27017/cymulate
 });
 
 app.post('/rfc', async (req, res) => {
-    // const decryptedData = dencryptIt(req.body.data);
+    let decryptedData = JSON.parse(decrypt(req.body));
 
-    switch (req.body.action) {
+    let returnData = {};
+
+    switch (decryptedData.action) {
         case 'get':
-            await res.json(await cymulateSettings.getCymulateSettings(connection, req.body));
+            returnData = await cymulateSettings.getCymulateSettings(connection, decryptedData);
+            // encrypt(JSON.stringify(returnData));
+            await res.json(encrypt(JSON.stringify(returnData)));
             break;
         case 'create':
-            await res.json([await cymulateSettings.createCymulateSettings(connection, req.body)]);
+            returnData = [await cymulateSettings.createCymulateSettings(connection, decryptedData)];
+            // encrypt(JSON.stringify(returnData));
+            await res.json(encrypt(JSON.stringify(returnData)));
             break;
         case 'update':
-            await res.json([await cymulateSettings.updateCymulateSettings(connection, req.body)]);
+            returnData = [await cymulateSettings.updateCymulateSettings(connection, decryptedData)];
+            // encrypt(JSON.stringify(returnData));
+            await res.json(encrypt(JSON.stringify(returnData)));
             break;
         case 'delete':
-            await res.json([await cymulateSettings.deleteCymulateSettings(connection, req.body)]);
+            returnData = [await cymulateSettings.deleteCymulateSettings(connection, decryptedData)];
+            // encrypt(JSON.stringify(returnData));
+            await res.json(encrypt(JSON.stringify(returnData)));
             break;
         default:
             console.log('Problem with req.body.action')

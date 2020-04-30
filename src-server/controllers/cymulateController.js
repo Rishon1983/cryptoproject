@@ -3,30 +3,16 @@ import {loginCheck} from '../models/users.js'
 import {logsAction} from '../models/logs.js'
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken';
+import {encrypt, decrypt} from '../crypto.js'
 
 const sendDataToServer2 = async (data) => {
-// const sendDataToServer2 = async (action, value = null) => {
-    //passport.js JWT
-
-    // const data = {
-    //     action,
-    //     value
-    // };
-    // const encryptedData = encryptIt(data);
-    // const encryptedData = encrypt(JSON.stringify(data));
-    // const result = await axios.post('http://localhost:3000/rfc', encryptedData);
-
-
-    // console.log(data);
-    // const result =  await axios.post('http://localhost:3000/rfc', data);
-    // return result;
-
 
     let result = {};
 
     await axios.post('http://localhost:3000/rfc', data)
         .then((response) => {
-            result = response.data;
+            // decrypt(response.data)
+            result = JSON.parse(decrypt(response.data));
         })
         .catch((error) => {
             console.log(error);
@@ -34,13 +20,6 @@ const sendDataToServer2 = async (data) => {
 
     return result;
 
-    // axios.post('http://localhost:3000/rfc', data).then(res => {
-    //     console.log(res);
-    //     return res;
-    // })
-
-    // const decryptedData = decrypt(result);
-    // return (JSON.parse(decryptedData));
 }
 
 const cymulateSettings = async (req, res) => {
@@ -50,8 +29,11 @@ const cymulateSettings = async (req, res) => {
         if (err) {
             res.sendStatus(403);
         } else {
-            const data = req.body;
-            const settingsArray = await sendDataToServer2(data);
+
+            //encrypt data
+            const encryptedData = encrypt(JSON.stringify(req.body));
+
+            const settingsArray = await sendDataToServer2(encryptedData);
 
             //create connection
             const connection = mongoose.createConnection('mongodb://localhost:27017/cymulate', {

@@ -11,8 +11,6 @@ const usersLogSchema = new Schema({
 
 const logsAction = (connection, data) => {
 
-    console.log('===========>', data)
-
     const Logs = connection.model('logs', usersLogSchema);
     Logs.create({
         userId: data.userId,

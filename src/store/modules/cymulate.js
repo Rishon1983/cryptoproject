@@ -20,7 +20,6 @@ const actions = {
         data.userId = localStorage.getItem('userId');
         axios.defaults.headers.common['Authorization'] = `Bearer ` + localStorage.getItem('token');
         axios.post('http://localhost:80/api/v1/cymulateSettings', data).then(res => {
-            console.log(res);
             commit(data.action + 'Settings', res.data.result);
         })
 
@@ -40,7 +39,6 @@ const actions = {
     },
     loginClient({commit}, data) {
         axios.post('http://localhost:80/api/v1/cymulateLogin', data).then(res => {
-            console.log(res);
             commit('login', res.data.result);
         })
     }

@@ -2,7 +2,6 @@ import express from 'express';
 import path from 'path';
 import axios from 'axios';
 import initRoutes from "./routes/init.js";
-// import {encrypt, decrypt} from 'crypto.mjs'
 
 const app = express();
 const __dirname = path.resolve();
