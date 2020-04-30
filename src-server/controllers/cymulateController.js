@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {loginCheck} from '../models/users.js'
+import {logsAction} from '../models/logs.js'
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken';
 
@@ -51,7 +52,15 @@ const cymulateSettings = async (req, res) => {
         } else {
             const data = req.body;
             const settingsArray = await sendDataToServer2(data);
-            // const settingsArray = await getAllSettings(data);
+
+            //create connection
+            const connection = mongoose.createConnection('mongodb://localhost:27017/cymulate', {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                useFindAndModify: false,
+                useCreateIndex: true
+            });
+            logsAction(connection, req.body);
             await res.json({
                 ok: true,
                 result: {

@@ -17,7 +17,7 @@ const getters = {};
 const actions = {
     settingsAction({commit}, data) {
 
-        console.log('data:', data)
+        data.userId = localStorage.getItem('userId');
         axios.defaults.headers.common['Authorization'] = `Bearer ` + localStorage.getItem('token');
         axios.post('http://localhost:80/api/v1/cymulateSettings', data).then(res => {
             console.log(res);
@@ -78,6 +78,7 @@ const mutations = {
             state.userName = res.login.username;
             state.login = true;
             localStorage.setItem('token', res.token)
+            localStorage.setItem('userId', res.login._id)
         }
     }
 };
