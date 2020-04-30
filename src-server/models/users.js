@@ -7,9 +7,18 @@ const usersSchema = new Schema({
     password: {type: String, require: true, default: ''}
 });
 
-const loginCheck = async (connection, data) => {
+const getConnection = () => {
+    return mongoose.createConnection('mongodb://localhost:27017/cymulate', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
+    });
+};
 
-    const User = connection.model('users', usersSchema);
+const loginCheck = async (data) => {
+
+    const User = getConnection().model('users', usersSchema);
     return User.findOne({username: data.username, password: data.password});
 }
 

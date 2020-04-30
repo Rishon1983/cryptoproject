@@ -9,7 +9,17 @@ const settingsSchema = new Schema({
     value: {type: Schema.Types.Mixed, require: true, default: {a: {b: {c: "a"}}}}
 });
 
-const getAllSettings = async (connection, data) => {
+const getConnection = () => {
+    return mongoose.createConnection('mongodb://localhost:27017/cymulate', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
+    });
+};
+
+
+const getAllSettings = async (data) => {
 
     // return {someData: 'data'}
     // const client = new MongoClient('mongodb://localhost:27017/cymulate');
@@ -27,22 +37,22 @@ const getAllSettings = async (connection, data) => {
     //     useNewUrlParser: true,
     //     useUnifiedTopology: true
     // });
-    const Settings = connection.model('settings', settingsSchema);
+    const Settings = getConnection().model('settings', settingsSchema);
     return Settings.find({});
 }
 
-const createSettings = async (connection, data) => {
-    const Settings = connection.model('settings', settingsSchema);
+const createSettings = async (data) => {
+    const Settings = getConnection().model('settings', settingsSchema);
     return Settings.create({key: 'settings' + Date.now()});
 }
 
-const updateSettings = async (connection, data) => {
-    const Settings = connection.model('settings', settingsSchema);
+const updateSettings = async (data) => {
+    const Settings = getConnection().model('settings', settingsSchema);
     return Settings.findOneAndUpdate({_id: data.settingsId}, {$set: {key: 'settings' + Date.now()}}, {new: true});
 }
 
-const deleteSettings = async (connection, data) => {
-    const Settings = connection.model('settings', settingsSchema);
+const deleteSettings = async (data) => {
+    const Settings = getConnection().model('settings', settingsSchema);
     return Settings.findOneAndDelete({_id: data.settingsId});
 }
 

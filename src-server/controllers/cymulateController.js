@@ -1,7 +1,6 @@
 import axios from 'axios';
 import {loginCheck} from '../models/users.js'
 import {logsAction} from '../models/logs.js'
-import mongoose from "mongoose";
 import jwt from 'jsonwebtoken';
 import {encrypt, decrypt} from '../crypto.js'
 
@@ -35,14 +34,7 @@ const cymulateSettings = async (req, res) => {
 
             const settingsArray = await sendDataToServer2(encryptedData);
 
-            //create connection
-            const connection = mongoose.createConnection('mongodb://localhost:27017/cymulate', {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                useFindAndModify: false,
-                useCreateIndex: true
-            });
-            logsAction(connection, req.body);
+            logsAction(req.body);
             await res.json({
                 ok: true,
                 result: {
@@ -80,15 +72,7 @@ const verifyToken = (req, res, next) => {
 const login = async (req, res) => {
     const data = req.body;
 
-    //create connection
-    const connection = mongoose.createConnection('mongodb://localhost:27017/cymulate', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-        useCreateIndex: true
-    });
-
-    const userData = await loginCheck(connection, data);
+    const userData = await loginCheck(data);
 
     let token = '';
 

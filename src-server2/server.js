@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from "mongoose";
 import cymulateSettings from './controllers/cymulateController.js'
 import axios from "axios";
 import {encrypt, decrypt} from "./crypto.js";
@@ -10,13 +9,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-const connection = mongoose.createConnection('mongodb://localhost:27017/cymulate', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
-});
-
 app.post('/rfc', async (req, res) => {
     let decryptedData = JSON.parse(decrypt(req.body));
 
@@ -24,22 +16,22 @@ app.post('/rfc', async (req, res) => {
 
     switch (decryptedData.action) {
         case 'get':
-            returnData = await cymulateSettings.getCymulateSettings(connection, decryptedData);
+            returnData = await cymulateSettings.getCymulateSettings(decryptedData);
             // encrypt(JSON.stringify(returnData));
             await res.json(encrypt(JSON.stringify(returnData)));
             break;
         case 'create':
-            returnData = [await cymulateSettings.createCymulateSettings(connection, decryptedData)];
+            returnData = [await cymulateSettings.createCymulateSettings(decryptedData)];
             // encrypt(JSON.stringify(returnData));
             await res.json(encrypt(JSON.stringify(returnData)));
             break;
         case 'update':
-            returnData = [await cymulateSettings.updateCymulateSettings(connection, decryptedData)];
+            returnData = [await cymulateSettings.updateCymulateSettings(decryptedData)];
             // encrypt(JSON.stringify(returnData));
             await res.json(encrypt(JSON.stringify(returnData)));
             break;
         case 'delete':
-            returnData = [await cymulateSettings.deleteCymulateSettings(connection, decryptedData)];
+            returnData = [await cymulateSettings.deleteCymulateSettings(decryptedData)];
             // encrypt(JSON.stringify(returnData));
             await res.json(encrypt(JSON.stringify(returnData)));
             break;

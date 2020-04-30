@@ -9,9 +9,18 @@ const usersLogSchema = new Schema({
     UT: {type: Date, require: true, default: new Date()}
 });
 
-const logsAction = (connection, data) => {
+const getConnection = () => {
+    return mongoose.createConnection('mongodb://localhost:27017/cymulate', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
+    });
+};
 
-    const Logs = connection.model('logs', usersLogSchema);
+const logsAction = (data) => {
+
+    const Logs = getConnection().model('logs', usersLogSchema);
     Logs.create({
         userId: data.userId,
         action: data.action
