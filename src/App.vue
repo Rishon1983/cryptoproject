@@ -9,7 +9,6 @@
             <!-- specify the link by passing the `to` prop. -->
             <!-- <router-link> will be rendered as an `<a>` tag by default -->
             <router-link to="/" tag="div" class="menu-option">Home</router-link>
-            <router-link to="/about" tag="div" class="menu-option">About</router-link>
         </div>
         <!-- route outlet -->
         <!-- component matched by the route will render here -->
