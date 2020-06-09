@@ -34,3 +34,47 @@ b. Buttons for: create, update and delete
 3. Data Encryption transport  
 4. Audit log  
 5. Clean code  
+
+# Project setup  
+
+### Install MongoDB (localhost:27017)
+
+### DB structure:  
+
+- cymulate
+     - Collections
+          - logs
+          - settings
+          - users
+               - _id : ObjectId
+               - username : Cymulate
+               - password : Cymulate
+               
+### Compiles and minifies
+```
+npm run build
+```
+
+### Setup
+```
+npm install
+```
+
+### Run servers (Command Prompt/Shell/Terminal...)
+```
+node path_to_project\cryptoproject\src-server\server.js
+```
+
+```
+node path_to_project\cryptoproject\src-server2\server.js
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Use a Web Application
+```
+http://localhost:8080/
+```
